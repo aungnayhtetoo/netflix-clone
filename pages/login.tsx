@@ -2,6 +2,7 @@ import Head from 'next/head'
 import Image from 'next/image'
 import React, { useState } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
+import useAuth from '../hooks/useAuth'
 
 interface Inputs {
   email: string
@@ -15,7 +16,16 @@ export default function Login() {
     handleSubmit,
     formState: { errors },
   } = useForm<Inputs>()
-  const onSubmit: SubmitHandler<Inputs> = (data) => console.log(data)
+
+  const {signIn, signUp} = useAuth()
+
+  const onSubmit: SubmitHandler<Inputs> = async ({email, password}) => {
+    if (login) {
+        await signIn(email, password)
+    } else {
+        await signUp(email, password)
+    }
+  }
 
   return (
     <div
@@ -49,21 +59,35 @@ export default function Login() {
         <h1 className="text-4xl font-semibold">Sign In</h1>
         <div className="space-y-4">
           <label className="inline-block w-full">
-            <input className="loginInput" type="email" placeholder="Email" 
-            {...register('email', {required: true})}/>
+            <input
+              className="loginInput"
+              type="email"
+              placeholder="Email"
+              {...register('email', { required: true })}
+            />
+            {errors.email && (
+              <p className="p-1 text-[13px] font-light text-orange-500">
+                Please enter a valid email
+              </p>
+            )}
           </label>
           <label className="inline-block w-full">
             <input
               className="loginInput"
               type="password"
               placeholder="Password"
-              {...register('password', {required: true})}
+              {...register('password', { required: true })}
             />
+            {errors.password && (
+              <p className="p-1 text-[13px] font-light text-orange-500">
+                Your password must be between 4 and 60 characters
+              </p>
+            )}
           </label>
         </div>
 
         <button
-          type="submit"
+          onClick={() => setLogin(true)}
           className="w-full rounded bg-[#e50914] py-3 font-semibold"
         >
           Sign In
@@ -71,7 +95,11 @@ export default function Login() {
 
         <div className="text-[gray]">
           New to Netflix?
-          <button className="px-2 text-white hover:underline">
+          <button
+            type="submit"
+            onClick={() => setLogin(false)}
+            className="px-2 text-white hover:underline"
+          >
             Sign up now
           </button>
         </div>

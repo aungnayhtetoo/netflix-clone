@@ -15,6 +15,7 @@ function Row({title, movies}: Props) {
 
     const handleClick = (direction: string) => {
         setIsMoved(true)
+
         
         if(rowRef.current) {
             const {scrollLeft, clientWidth} = rowRef.current
@@ -22,6 +23,7 @@ function Row({title, movies}: Props) {
                 ? scrollLeft - clientWidth
                 : scrollLeft + clientWidth
 
+            console.log(scrollTo)
             if(scrollTo === 0) {
                 setIsMoved(false)
             }
@@ -31,9 +33,12 @@ function Row({title, movies}: Props) {
     }
   return (
     <div className='h-40 space-y-0.5 md:space-y-2'>
-        <h2 className='w-56 cursor-pointer text-sm font-semibold text-[#e5e5e5] transition duration-200 hover:text-white md:text-xl'>{title}</h2>
+        <h2 className='w-56 cursor-pointer text-sm font-semibold text-[#e5e5e5] transition duration-200 hover:text-white md:text-xl'>
+            {title}
+        </h2>
         <div className='group relative md:-ml-2'>
-            <ChevronLeftIcon className={`rowButton left-2  ${!isMoved && 'hidden'}`} onClick={() => handleClick('left')}/>
+            <ChevronLeftIcon className={`rowButton left-2  
+            ${!isMoved && 'hidden'}`} onClick={() => handleClick('left')}/>
            
            <div ref={rowRef} className=' flex items-center space-x-0.5 overflow-x-scroll 
            md:space-x-2.5 md:p-2 scrollbar-hide'> 
@@ -42,7 +47,8 @@ function Row({title, movies}: Props) {
                })}
                
            </div>
-            <ChevronRightIcon className={`rowButton right-2`} onClick={() => handleClick('right')}/>
+            <ChevronRightIcon className={`rowButton right-2`} 
+            onClick={() => handleClick('right')}/>
         </div>
     </div>
   )
