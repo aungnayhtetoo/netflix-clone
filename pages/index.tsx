@@ -1,9 +1,12 @@
 import type { NextPage } from 'next'
 import Head from 'next/head'
 import Image from 'next/image'
-import Banner from '../components/banner'
-import Header from '../components/header'
-import Row from '../components/row'
+import { useRecoilValue } from 'recoil'
+import { modalState } from '../atoms/modalAtom'
+import Banner from '../components/Banner'
+import Header from '../components/Header'
+import Modal from '../components/Modal'
+import Row from '../components/Row'
 import useAuth from '../hooks/useAuth'
 import { Movie } from '../typing'
 import requests from '../utils/request'
@@ -31,7 +34,7 @@ const Home = ({
 
   const {loading} = useAuth()
 
-  // const showModal = useRecoilValue()
+  const showModal = useRecoilValue(modalState)
   // Same as using useState()
   // const [showModal, setShowModal] = useState(false)
 
@@ -58,7 +61,7 @@ const Home = ({
 
         </section>
       </main>
-      {/* Modal */}
+      {showModal && <Modal />}
     </div>
   )
 }
