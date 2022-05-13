@@ -7,7 +7,7 @@ import {
 } from 'firebase/auth'
 import { useRouter } from 'next/router'
 import { createContext, useContext, useEffect, useState, useMemo } from 'react'
-import { auth } from '../firebase'
+import { auth } from '../lib/firebase'
 
 interface IAuth {
   user: User | null

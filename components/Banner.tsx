@@ -53,8 +53,8 @@ function Banner({ netflixOriginals }: Props) {
           setShowModal(true)
         }}
         className="bannerButton bg-[gray]/70">
-          <InformationCircleIcon className="h-5 w-5 md:h-8 md:w-8" />
           More Info
+          <InformationCircleIcon className="h-5 w-5 md:h-8 md:w-8" />
         </button>
       </div>
     </div>
