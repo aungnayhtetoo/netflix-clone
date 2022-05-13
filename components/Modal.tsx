@@ -78,6 +78,7 @@ function Modal() {
         </button>
 
         <div className="relative pt-[56.25%]">
+          <>
           <ReactPlayer
             playing
             muted={muted}
@@ -86,6 +87,8 @@ function Modal() {
             height="100%"
             style={{ position: 'absolute', top: '0', right: '0' }}
           />
+          </>
+         
           <div className="absolute bottom-10 flex w-full items-center justify-between px-10">
             <div className="flex space-x-2">
               <button
