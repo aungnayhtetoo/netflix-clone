@@ -35,11 +35,11 @@ interface AuthProviderProps {
 }
 
 export const AuthProvider = ({ children }: AuthProviderProps) => {
+  const router = useRouter()
   const [user, setUser] = useState<User | null>(null)
   const [loading, setLoading] = useState(false)
   const [intialLoading, setIntialLoading] = useState(true)
   const [error, setError] = useState(null)
-  const router = useRouter()
 
   // use effect without writing clean up function
   useEffect(() => 
@@ -55,9 +55,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
         router.push('/login')
       }
       setIntialLoading(false)
-    })
-
-  , [auth])
+    }), [auth])
 
   const signUp = async (email: string, password: string) => {
     setLoading(true)
@@ -117,7 +115,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
       loading,
       error,
     }),
-    [user, loading]
+    [user, loading, error]
   )
 
   return (

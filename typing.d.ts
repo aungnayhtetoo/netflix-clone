@@ -3,6 +3,12 @@ export interface Genre {
     name: string
 }
 
+export interface Quality {
+    id: string,
+    text: string
+    def: string
+}
+
 // Similar to schema of the API call
 export interface Movie {
     title: string
@@ -15,7 +21,7 @@ export interface Movie {
     name: string
     origin_country: string[]
     original_language: string
-    original_name: string
+    original_title: string
     overview: string
     popularity: number
     poster_path: string

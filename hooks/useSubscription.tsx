@@ -7,12 +7,11 @@ import { useEffect, useState } from 'react'
 import payments from '../lib/stripe'
 
 function useSubscription(user: User | null) {
-  const [subscription, setSubscription] = useState<Subscription>()
+  const [subscription, setSubscription] = useState<Subscription | null>(null)
 
   useEffect(() => {
     if (!user) return
 
-    // listener for subscription event
     onCurrentUserSubscriptionUpdate(payments, (snapshot) => {
       setSubscription(
         snapshot.subscriptions.filter(
@@ -21,10 +20,9 @@ function useSubscription(user: User | null) {
             subscription.status === 'trialing'
         )[0]
       )
-      console.log(subscription)
     })
-    // returning the subscription of the user
   }, [user])
+
   return subscription
 }
 

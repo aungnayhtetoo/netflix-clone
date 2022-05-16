@@ -3,13 +3,15 @@ import type { NextPage } from 'next'
 import Head from 'next/head'
 import Image from 'next/image'
 import { useRecoilValue } from 'recoil'
-import { modalState } from '../atoms/modalAtom'
+import { modalState, movieState } from '../atoms/modalAtom'
 import Banner from '../components/Banner'
 import Header from '../components/Header'
 import Modal from '../components/Modal'
+import MyList from '../components/MyList'
 import Plans from '../components/Plans'
 import Row from '../components/Row'
 import useAuth from '../hooks/useAuth'
+import useList from '../hooks/useList'
 import useSubscription from '../hooks/useSubscription'
 import payments from '../lib/stripe'
 import { Movie } from '../typing'
@@ -35,19 +37,23 @@ const Home = ({
   horrorMovies,
   romanceMovies,
   documentaries,
-  products
+  products,
 }: Props) => {
-
-  console.log(products)
-  const {loading, user} = useAuth()
+  // console.log(products)
+  const { loading, user } = useAuth()
   const subscription = useSubscription(user)
   const showModal = useRecoilValue(modalState)
-  
+  // const movie = useRecoilValue(movieState)
+  // const list = useList(user?.uid)
+
   // Same as using useState()
   // const [showModal, setShowModal] = useState(false)
 
   if (loading || subscription === null) return null
-  if (!subscription) return <Plans products={products}/>
+  if (subscription === undefined || !subscription) {
+    console.log(subscription)
+    return <Plans products={products} />
+  }
 
   return (
     <div className="relative h-screen bg-gradient-to-b from-gray-900/10 to-[#010511] lg:h-[140vh]">
@@ -58,16 +64,16 @@ const Home = ({
       <Header />
       <main className="relative pl-4 pb-24 lg:space-y-24 lg:pl-16">
         <Banner netflixOriginals={netflixOriginals} />
-        <section className='md:space-y-24'>
-          <Row title='Trending Now' movies={trendingNow} />
-          <Row title='Top Rated' movies={topRated} />
-          <Row title='Action Thrillers' movies={actionMovies} />
-          {/* My List */}
-          <Row title='Comedies' movies={comedyMovies} />
-          <Row title='Scary Movies' movies={horrorMovies} />
-          <Row title='Romance Movies' movies={romanceMovies} />
-          <Row title='Documentaries' movies={documentaries} />
-
+        <section className="md:space-y-24">
+          <Row title="Trending Now" movies={trendingNow} />
+          <Row title="Top Rated" movies={topRated} />
+          <Row title="Action Thrillers" movies={actionMovies} />
+          {/* My List show favorite shows */}
+          <MyList />
+          <Row title="Comedies" movies={comedyMovies} />
+          <Row title="Scary Movies" movies={horrorMovies} />
+          <Row title="Romance Movies" movies={romanceMovies} />
+          <Row title="Documentaries" movies={documentaries} />
         </section>
       </main>
       {showModal && <Modal />}
@@ -78,16 +84,13 @@ const Home = ({
 export default Home
 
 export const getServerSideProps = async () => {
-
   // not transpiling correctly have to use transpile
-  const products = await getProducts(
-    payments, {
-      includePrices:true,
-      activeOnly: true,
-    }
-  ).then(response => response).catch(
-    err => console.log(err)
-  )
+  const products = await getProducts(payments, {
+    includePrices: true,
+    activeOnly: true,
+  })
+    .then((response) => response)
+    .catch((err) => console.log(err))
   const [
     netflixOriginals,
     trendingNow,
@@ -118,7 +121,7 @@ export const getServerSideProps = async () => {
       horrorMovies: horrorMovies.results,
       romanceMovies: romanceMovies.results,
       documentaries: documentaries.results,
-      products
+      products,
     },
   }
 }
